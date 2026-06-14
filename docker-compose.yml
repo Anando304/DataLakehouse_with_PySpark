@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  spark-master:
+    build: .
+    image: local-apache-pyspark:3.5.1
+    container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    volumes:
+      - ./data:/opt/spark-data
+      - ./jobs:/opt/spark-jobs
+    networks:
+      - spark-net
+
+  spark-worker:
+    build: .
+    image: local-apache-pyspark:3.5.1
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    volumes:
+      - ./data:/opt/spark-data
+      - ./jobs:/opt/spark-jobs
+    networks:
+      - spark-net
+
+networks:
+  spark-net:
+    driver: bridge

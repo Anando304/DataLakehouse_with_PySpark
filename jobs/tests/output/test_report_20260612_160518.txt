@@ -1,0 +1,64 @@
+
+        ================================================================================
+        PYSPARK AUTOMATED TEST SUITE EXECUTION REPORT
+        ================================================================================
+        Runtime Node:    Docker Cluster Master Node (spark-master)
+        Python Version:  3.8.10
+        ================================================================================
+
+        STDOUT LOGS:
+        --------------------------------------------------------------------------------
+        ============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-8.3.5, pluggy-1.5.0
+rootdir: /opt/spark-jobs
+collected 6 items
+
+tests/test_utils.py .F....                                               [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_generate_session_info __________________________
+
+spark = <pyspark.sql.session.SparkSession object at 0xffffa38e64c0>
+
+    def test_generate_session_info(spark):
+        schema = T.StructType([
+            T.StructField("userid", T.StringType(), True),
+            T.StructField("timestamp", T.TimestampType(), True),
+            T.StructField("musicbrainz-track-id", T.StringType(), True),
+            T.StructField("track-name", T.StringType(), True)
+        ])
+    
+        from datetime import datetime, timedelta
+        base_time = datetime(2023, 1, 1, 12, 0, 0)
+    
+        # user_1: 3 tracks, two in same session, one in new session (gap > 20 mins)
+        # user_2: 1 track
+        data = [
+            ("user_1", base_time, "t1", "Song 1"),
+            ("user_1", base_time + timedelta(minutes=10), "t2", "Song 2"), # Same session
+            ("user_1", base_time + timedelta(minutes=31), "t3", "Song 3"), # New session
+            ("user_2", base_time, "t4", "Song 4")                          # Different user
+        ]
+        df = spark.createDataFrame(data, schema)
+    
+        # Execute (gap_threshold=1200 seconds = 20 mins)
+        result_df = generate_session_info(df, gap_threshold=1200)
+        results = result_df.orderBy("userid", "timestamp").collect()
+    
+        # Assertions
+        assert len(results) == 4
+    
+        # Check user_1 sessions
+        # result[0] and result[1] should have the same session key
+>       assert results[0]["global_session_key"] != results[1]["global_session_key"]
+E       AssertionError: assert 'user_1_1' != 'user_1_1'
+
+tests/test_utils.py:84: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_utils.py::test_generate_session_info - AssertionError: asse...
+========================= 1 failed, 5 passed in 5.49s ==========================
+
+        ================================================================================
+        REPORT STATUS: RED (FAILED)
+        ================================================================================
+    
