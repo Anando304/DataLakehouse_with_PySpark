@@ -81,13 +81,6 @@ make run_tests
 
 The project is fully containerized to ensure Spark, Python, and all dependencies (like `statsmodels` and `pandas`) are correctly configured.
 
-### Step 0: Download the Datasets
-- Download from: http://ocelma.net/MusicRecommendationDataset/lastfm-1K.html
-- Unzip the files and place in `/data/` directory
-	- `userid-timestamp-artid-artname-traid-traname.tsv`
-	- `userid-profile.tsv`
-
-### Miscellaneous: Helpful `make` Commands for Docker
 To build the image and start the Spark cluster (Master and Workers) in the background:
 ```bash
 make up
