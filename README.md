@@ -49,13 +49,13 @@ The scripts are executed via `spark-submit` on the `spark-master` container. We 
 
 ### Step 1: Top Songs Analytics Pipeline
 ```bash
-make run_problem_2
+make run_job2
 ```
 *Output location:* `/opt/spark-data/output/top_songs_in_longest_sessions_by_track_count.csv`
 
 ### Step 2: Session Forecasting Pipeline
 ```bash
-make run_problem_3
+make run_job3
 ```
 *Output location:* Check `/opt/spark-data/output/` for `forecast90d_user_most_sessions.csv` and the backtest evaluation report.
 
