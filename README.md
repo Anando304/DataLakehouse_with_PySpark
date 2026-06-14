@@ -47,13 +47,16 @@ This project is a PySpark-based data engineering and machine learning pipeline d
 
 The scripts are executed via `spark-submit` on the `spark-master` container. We can run the below commands once Docker containers are setup (Refer to commands in previous step)
 
-### Step 1: Top Songs Analytics Pipeline
+### Step 1: Spin-up Docker Containers
+- `make up` 
+
+### Step 2: Top Songs Analytics Pipeline
 ```bash
 make run_job2
 ```
 *Output location:* `/opt/spark-data/output/top_songs_in_longest_sessions_by_track_count.csv`
 
-### Step 2: Session Forecasting Pipeline
+### Step 3: Session Forecasting Pipeline
 ```bash
 make run_job3
 ```
@@ -66,7 +69,7 @@ make run_job job=<JOB_NAME>.py
 ```
 
 
-### Step 3: Running Unit Tests
+### Step 4: Running Unit Tests
 
 The project includes a suite of tests using `pytest` to validate session and metric utility functions.
 
