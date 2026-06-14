@@ -45,7 +45,6 @@ This project is a PySpark-based data engineering and machine learning pipeline d
 	- `userid-timestamp-artid-artname-traid-traname.tsv`
 	- `userid-profile.tsv`
 
-The scripts are executed via `spark-submit` on the `spark-master` container. We can run the below commands once Docker containers are setup (Refer to commands in previous step)
 
 ### Step 1: Spin-up Docker Containers
 - `make up` 
